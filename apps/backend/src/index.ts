@@ -2,6 +2,7 @@ import express from 'express'
 import { PreInterviewSchema } from './types.js'
 import axios from 'axios'
 import cors from "cors"
+import prisma from './lib/prisma.js'
 
 const app = express()
 app.use(express.json())
@@ -30,6 +31,13 @@ app.post("/api/v1/pre-interview",async (req,res)=>{
             fullName : item.fullName,
             startCount: item.startCount
         }))
+
+        // await prisma.interview.create(
+        //     data:{
+        //         githubMetadata:filteredRepoData,
+
+        //     }
+        // )
 
         return res.status(200).json({
             Data: filteredRepoData,
