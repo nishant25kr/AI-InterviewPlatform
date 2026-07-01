@@ -26,8 +26,9 @@ export const Form = () => {
                 github: github.trim(),
                 linkedin: linkedin?.trim()
             })
+            console.log("res",res)
             if (res.status === 200) {
-                navigate(`interview/${res.data.interviewId}`);
+                navigate(`/interview/${res.data.id}`);
             }
 
         } catch (error: any) {
@@ -64,6 +65,7 @@ export const Form = () => {
                 </div>
             </div>
             <ToastContainer />
+
         </div>
     )
 }

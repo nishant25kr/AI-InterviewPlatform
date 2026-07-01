@@ -18,7 +18,7 @@ export type MessageType = (typeof MessageType)[keyof typeof MessageType]
 
 
 export const InterviewStatus = {
-  pre: 'pre',
+  Pre: 'Pre',
   InProgress: 'InProgress',
   Done: 'Done'
 } as const

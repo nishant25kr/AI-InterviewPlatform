@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,10 +14,11 @@ datasource db {
 
 model Interview{
   id              String    @id @default(uuid())
-  githubMetadata  Json
-  status          InterviewStatus 
-  score           Int
+  githubMetadata  Json?
+  status          InterviewStatus? 
+  score           Int?         @default(0)
   conversations   Message[]
+  feedback        String?
 }
 
 model Message {
@@ -33,7 +34,7 @@ enum MessageType{
   Assistance
 }
 enum InterviewStatus{
-  pre
+  Pre
   InProgress
   Done
 }
