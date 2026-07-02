@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useRef } from "react"
 
 export const Interview = ()=>{
@@ -16,20 +15,26 @@ export const Interview = ()=>{
             audio: true,
             });
             pc.addTrack(ms.getTracks()[0]);
-
+            console.log("hi1")
             const offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
+            console.log("hi2",offer.sdp?.split("\n").slice(1).join("\n"))
             
-
-            const sdpResponse = await axios.post(`http://localhost:3000/api/v1/session`,{
-                sdp : offer.sdp
+            const sdpResponse = await fetch(`http://localhost:3000/api/v1/session`, {
+                method: "POST",
+                body: offer.sdp,
+                headers: {
+                    "Content-Type": "application/sdp",
+                },
             });
 
+            console.log("hi3")
             const answer = {
                 type: "answer" as "answer",
-                sdp: sdpResponse.data,
+                sdp: await sdpResponse.text(),
             };
             await pc.setRemoteDescription(answer);
+
         })()
     },[])
 
