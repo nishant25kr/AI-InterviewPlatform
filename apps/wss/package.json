@@ -1,0 +1,25 @@
+{
+  "name": "wss",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun index.ts",
+    "build": "bunx tsc"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.20.0",
+    "prisma": "^7.9.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.0",
+    "@prisma/client": "^7.9.0",
+    "@types/ws": "^8.18.1",
+    "pg": "^8.22.0",
+    "ws": "^8.21.1"
+  }
+}

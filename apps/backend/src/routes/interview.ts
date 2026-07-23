@@ -4,9 +4,9 @@ import axios from 'axios';
 import prisma from '../lib/prisma.js';
 
 const sessionConfig = JSON.stringify({
-  type: "realtime",
-  model: "gpt-realtime-2",
-  audio: { output: { voice: "marin" } },
+    type: "realtime",
+    model: "gpt-realtime-2",
+    audio: { output: { voice: "marin" } },
 });
 
 
@@ -51,30 +51,25 @@ router.post("/pre-interview", async (req, res) => {
     }
 });
 
-router.post("/session", async(req,res)=>{
+router.post("/session", async (req, res) => {
+    console.log("session init")
+    const sessionConfig = JSON.stringify({
+        type: "realtime",
+        model: "gemini-3.5-realtime",
+        audio: { output: { voice: "marin" } },
+    });
+
+    const fd = new FormData();
+    fd.set("sdp", req.body);
+    fd.set("session", sessionConfig);
+
     try {
-        const fd = new FormData();
-        fd.set("sdp", req.body);
-        fd.set("session", sessionConfig);
-
-        try {
-            const r = await fetch("https://api.openai.com/v1/realtime/calls", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                "OpenAI-Safety-Identifier": "hashed-user-id",
-            },
-            body: fd,
-            });
-
-            const sdp = await r.text();
-            res.send(sdp);
-        } catch (error) {
-            console.error("Token generation error:", error);
-            res.status(500).json({ error: "Failed to generate token" });
-        }     
-    } catch (error) {
         
+
+        // initSideband(callId, req.params.interviewId);
+    } catch (error: any) {
+        console.error("Gemini session error:", error);
+        res.status(500).json({ error: "Failed to create Gemini realtime session" });
     }
 });
 export default router;
