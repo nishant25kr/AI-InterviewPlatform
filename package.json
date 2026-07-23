@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "start": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
@@ -16,14 +17,14 @@
   "engines": {
     "node": ">=18"
   },
-  "devEngines": {
-    "packageManager": {
-      "name": "npm",
-      "version": "10.8.2"
-    }
-  },
+  "packageManager": "bun@1.0.0",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@avahq/wrtc": "^0.7.6-fixondata.1",
+    "@google/genai": "^2.13.0",
+    "webrtc": "^1.14.1"
+  }
 }
