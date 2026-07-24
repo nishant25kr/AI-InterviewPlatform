@@ -25,15 +25,10 @@ export const Interview = () => {
             };
             ws.send(JSON.stringify(audioMessage));
         }
-        // Silently drop chunks while the socket isn't open instead of
-        // logging on every single mic frame — avoids log spam if the
-        // mic is still emitting during shutdown.
     }, []);
 
     const mic = useMicStream(handleMicChunk);
 
-    // Keep a ref to the latest `mic` so the WS effect (which only runs
-    // once) never closes over a stale mic object/stale `active` flag.
     const micRef = useRef(mic);
     useEffect(() => {
         micRef.current = mic;
@@ -107,14 +102,42 @@ export const Interview = () => {
                 ws.close();
             }
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [interviewId]);
 
     return (
-        <div>
-            interview
-            <audio autoPlay ref={audioRef}></audio>
-            <h1>{interviewId}</h1>
+        <div className="p-5 border flex flex-col items-center justify-center h-screen">
+            <div className="flex items-center justify-center gap-4 m-10 h-full w-full border p-5">
+
+                <div className="flex-1 border rounded-lg p-4 w-full max-w-3xl h-full overflow-y-auto">
+                    <h1 className="text-xl font-bold">{interviewId}</h1>
+                </div>
+
+                <div className="border rounded-lg p-4 w-full h-full max-w-3xl flex items-center justify-center gap-4">
+                    <audio autoPlay ref={audioRef} >
+                    
+                    </audio>
+
+                    <h1 className="text-xxl font-bold">AI</h1>
+
+                </div>
+
+            </div>
+
+            <div className="border  h-1/6 flex flex-col items-center justify-center gap-4 w-full">
+                <button 
+                className="border rounded-lg p-4 w-full max-w-3xl bg-red-500 text-white hover:bg-red-600 transition-colors duration-300"
+                onClick={() => {
+                    micRef.current.stop();
+                    resetPlayer();
+                    if (wsRef.current) {
+                        wsRef.current.close();
+                    }
+                }}>
+                    Stop Interview
+                </button>
+            </div>
+
+
         </div>
     );
 };

@@ -19,10 +19,6 @@ wss.on("listening", () => {
 wss.on('connection', function connection(ws) {
     console.log('WebSocket Client Connected');
 
-    // Each client connection gets its OWN Gemini socket.
-    // (Previously `geminiWS` was a module-level variable shared across
-    // all clients — a second client connecting would silently steal/
-    // overwrite the first client's Gemini socket reference.)
     let geminiWS: WebSocket | null = null;
 
     ws.on('error', console.error);
@@ -91,10 +87,6 @@ wss.on('connection', function connection(ws) {
                         }
                     };
                     geminiWS?.send(JSON.stringify(setupMessage));
-                    // NOTE: this only confirms the setup message was SENT,
-                    // not that Gemini accepted it. Consider waiting for
-                    // Gemini's setupComplete response before telling the
-                    // client "connected" — see geminiWS.on('message') below.
                 });
 
                 geminiWS.on('message', async (event) => {
