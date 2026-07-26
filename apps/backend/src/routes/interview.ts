@@ -2,13 +2,7 @@ import { Router } from 'express';
 import { PreInterviewSchema } from '../types.js';
 import axios from 'axios';
 import prisma from '../lib/prisma.js';
-
-const sessionConfig = JSON.stringify({
-    type: "realtime",
-    model: "gpt-realtime-2",
-    audio: { output: { voice: "marin" } },
-});
-
+import { generateInterviewSummary } from '../lib/gemini.js';
 
 const router = Router();
 
@@ -64,7 +58,7 @@ router.post("/session", async (req, res) => {
     fd.set("session", sessionConfig);
 
     try {
-        
+
 
         // initSideband(callId, req.params.interviewId);
     } catch (error: any) {
@@ -72,4 +66,56 @@ router.post("/session", async (req, res) => {
         res.status(500).json({ error: "Failed to create Gemini realtime session" });
     }
 });
+
+router.get("/messages", async (req, res) => {
+    try {
+        const interviewId = req.body.interviewId as string;
+        if (!interviewId) {
+            return res.status(400).json({ message: "Missing interviewId query parameter" });
+        }
+        const messages = await prisma.message.findMany({
+            where: { interviewId },
+        });
+
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error("Error fetching messages:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.get("/result", async (req, res) => {
+    try {
+        const id = req.body.interviewId;
+        // console.log("interviewId", interviewId);
+        const response = await prisma.message.findMany({
+            where: {
+                interviewId: id
+            }
+        })
+
+        if (!response) {
+            res.status(404).json({ message: "candidate detail not found" })
+        }
+
+        const { summary, score } = await generateInterviewSummary({
+            //   candidateName: response.candidateName,
+            //   role: response,
+            transcript: response,
+        });
+
+        console.log(summary, score)
+
+        res.status(200).json({
+            message: "message found",
+            summary,
+            score,
+            transcript: response
+        })
+
+    } catch (error: any) {
+        res.json({"error" : error.message})
+    }
+})
+
 export default router;

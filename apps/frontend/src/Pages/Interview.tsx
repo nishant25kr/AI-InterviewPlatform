@@ -2,12 +2,14 @@ import { useCallback, useEffect, useRef } from "react";
 import { useMicStream } from "../hooks/useMicStream";
 import { useAudioPlayer } from "../hooks/useAudioPlayer";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const Interview = () => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const wsRef = useRef<WebSocket | null>(null);
     const { playChunk, reset: resetPlayer } = useAudioPlayer();
     const { interviewId } = useParams();
+    const navigate = useNavigate();
 
     const handleMicChunk = useCallback((base64: string) => {
         const ws = wsRef.current;
@@ -44,11 +46,6 @@ export const Interview = () => {
         wsRef.current = ws;
 
         ws.onopen = () => {
-            micRef.current
-                .start()
-                .then(() => console.log("Microphone started"))
-                .catch((err) => console.error("Error starting microphone", err));
-
             ws.send(
                 JSON.stringify({
                     type: "init",
@@ -74,10 +71,25 @@ export const Interview = () => {
                 case "status":
                     if (msg.status === "connected") {
                         console.log("status is connected");
+                        micRef.current
+                            .start()
+                            .then(() => console.log("Microphone started"))
+                            .catch((err) => console.error("Error starting microphone", err));
                     } else {
                         console.log("status is not connected");
                     }
                     break;
+                
+                // case 'turnComplete':
+                //     console.log("Turn complete for candidate:", msg.payload.candidateId);
+                //         navigate(`/result/${msg.payload.candidateId}`);
+                //     break;
+
+                // case 'interrupted':
+                //     console.log("Interview interrupted by the server.");
+                //     micRef.current.stop();
+                //     resetPlayer();
+                //     break;
 
                 default:
                     break;
@@ -113,26 +125,22 @@ export const Interview = () => {
                 </div>
 
                 <div className="border rounded-lg p-4 w-full h-full max-w-3xl flex items-center justify-center gap-4">
-                    <audio autoPlay ref={audioRef} >
-                    
-                    </audio>
-
+                    <audio autoPlay ref={audioRef} ></audio>
                     <h1 className="text-xxl font-bold">AI</h1>
-
                 </div>
 
             </div>
 
             <div className="border  h-1/6 flex flex-col items-center justify-center gap-4 w-full">
-                <button 
-                className="border rounded-lg p-4 w-full max-w-3xl bg-red-500 text-white hover:bg-red-600 transition-colors duration-300"
-                onClick={() => {
-                    micRef.current.stop();
-                    resetPlayer();
-                    if (wsRef.current) {
-                        wsRef.current.close();
-                    }
-                }}>
+                <button
+                    className="border rounded-lg p-4 w-full max-w-3xl bg-red-500 text-white hover:bg-red-600 transition-colors duration-300"
+                    onClick={() => {
+                        micRef.current.stop();
+                        resetPlayer();
+                        if (wsRef.current) {
+                            wsRef.current.close();
+                        }
+                    }}>
                     Stop Interview
                 </button>
             </div>
