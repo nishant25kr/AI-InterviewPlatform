@@ -84,13 +84,14 @@ router.get("/messages", async (req, res) => {
     }
 });
 
-router.get("/result", async (req, res) => {
+router.get("/result/:interviewId", async (req, res) => {
     try {
-        const id = req.body.interviewId;
-        // console.log("interviewId", interviewId);
+        const { interviewId } = req.params;
+
+        console.log("interviewId", interviewId);
         const response = await prisma.message.findMany({
             where: {
-                interviewId: id
+                interviewId: interviewId
             }
         })
 
@@ -114,7 +115,7 @@ router.get("/result", async (req, res) => {
         })
 
     } catch (error: any) {
-        res.json({"error" : error.message})
+        res.json({ "error": error.message })
     }
 })
 

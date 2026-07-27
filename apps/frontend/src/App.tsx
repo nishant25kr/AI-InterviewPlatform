@@ -1,6 +1,5 @@
 import './App.css'
 import {BrowserRouter, Route, Routes} from "react-router-dom"
-import { Landing } from './Pages/Landing'
 import { Home } from './Pages/Home'
 import { Login } from './Pages/Login'
 import { Signup } from './Pages/SignUp'
@@ -12,7 +11,7 @@ function App() {
   return (
     <BrowserRouter>
 		<Routes>
-			<Route path='/' element={<Landing/>} />
+			<Route path='/' element={<Home/>} />
 			<Route path='/login' element={<Login/>} />
 			<Route path='/signup' element={<Signup/>} />
 			<Route path='/home' element={<Home/>} />

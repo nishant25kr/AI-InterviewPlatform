@@ -8,10 +8,8 @@ export async function generateInterviewSummary(transcript: any){
     .map((t: any) => `${t.role === 'User' ? 'User' : 'Assistance'}: ${t.message}`)
     .join('\n');
 
-    console.log(transcriptText)
-
   const prompt = [
-    `Below is the transcript of a voice interview of the candidate.`,
+    `Below is the transc  ript of a voice interview of the candidate.`,
     `Write a concise hiring-panel summary covering: strengths, weaknesses, communication quality,`,
     `and a final recommendation (Strong Hire / Hire / No Hire / Strong No Hire).`,
     `Then on a new final line output exactly: "SCORE: X" where X is an integer 0-10.`,
