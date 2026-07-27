@@ -237,7 +237,7 @@ export const Interview = () => {
                     <VoicePanel
                         label="You"
                         color="#24427A"
-                        active={mic.isRecording ?? status === "live"}
+                        active={mic.active ?? status === "live"}
                         variant="pulse"
                     />
                     <VoicePanel
