@@ -1,0 +1,16 @@
+{$DOMAIN} {
+    # Route API traffic to the backend
+    handle /api/v1/* {
+        reverse_proxy backend:3000
+    }
+
+    # Route WebSocket traffic to the wss server
+    handle /ws {
+        reverse_proxy wss:8080
+    }
+
+    # Route everything else to the frontend Vite app
+    handle {
+        reverse_proxy frontend:80
+    }
+}
