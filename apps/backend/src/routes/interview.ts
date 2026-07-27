@@ -15,7 +15,12 @@ router.post("/pre-interview", async (req, res) => {
             })
             return;
         }
-        const githubUsername = data.github.split("/")[3];
+        let githubUsername = data.github;
+        if (githubUsername.includes("github.com/")) {
+            githubUsername = githubUsername.split("github.com/")[1].split("/")[0];
+        } else if (githubUsername.includes("/")) {
+            githubUsername = githubUsername.split("/").pop() || githubUsername;
+        }
         //Todo: Add proxy because github will rate limit you request
         const userRepo = await axios.get(`https://api.github.com/users/${githubUsername}/repos`)
 
