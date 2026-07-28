@@ -88,7 +88,6 @@ wss.on('connection', function connection(ws) {
                                     text: buildInterviewerSystemInstruction({
                                         githubMetadata: candidate.githubMetadata,
                                         role: "software developer",
-                                        candidateName: "Nishant",
                                         jobDescription: undefined
                                     })
                                 }]
@@ -249,9 +248,9 @@ function safeSend(ws: any, obj: any) {
     }
 }
 
-export function buildInterviewerSystemInstruction({ githubMetadata, role, candidateName, jobDescription }: { githubMetadata: any; role: string; candidateName: string; jobDescription?: string }): string {
+export function buildInterviewerSystemInstruction({ githubMetadata, role, jobDescription }: { githubMetadata: any; role: string; jobDescription?: string }): string {
     return [
-        `You are conducting a live voice interview for the "${role}" position with a candidate named ${candidateName}.`,
+        `You are conducting a live voice interview for the "${role}" position with a candidate.`,
         jobDescription ? `Job description / context:\n${jobDescription}` : '',
         `Behave as a professional, friendly technical interviewer:`,
         `- Greet the candidate briefly, then ask one question at a time.`,

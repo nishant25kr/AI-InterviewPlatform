@@ -84,6 +84,7 @@ export const Result = () => {
 function LoadingState() {
     return (
         <div className="animate-pulse">
+            <h1 className="mt-3 mb-4   ">Wait for result...</h1>
             <div className="h-3 w-24 rounded-full" style={{ backgroundColor: "#DAD5C7" }} />
             <div className="mt-6 h-10 w-2/3 rounded-md" style={{ backgroundColor: "#DAD5C7" }} />
             <div className="mt-3 h-4 w-1/3 rounded-md" style={{ backgroundColor: "#DAD5C7" }} />
