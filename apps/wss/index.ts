@@ -116,13 +116,20 @@ wss.on('connection', function connection(ws) {
                         return;
                     }
 
+                    if (msg.goAway) {
+                        const msLeft = msg.goAway.timeLeft;
+                        console.log(`Gemini session ending soon, time left: ${msLeft}`);
+                        safeSend(ws, { type: 'interviewComplete', payload: { candidateId: candidate.id } });
+                        geminiWS?.close();
+                        return;
+                    }
+
                     if (msg.setupComplete) {
                         safeSend(ws, { type: 'status', status: 'connected' });
                         return;
                     }
 
                     const sc = msg.serverContent;
-                    console.log("Received Gemini serverContent:", sc);
 
                     if (msg.toolCall?.functionCalls) {
                         console.log("tollcall called");
