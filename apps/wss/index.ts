@@ -267,5 +267,3 @@ export function buildInterviewerSystemInstruction({ githubMetadata, role, jobDes
         .filter(Boolean)
         .join('\n');
 }
-
-
